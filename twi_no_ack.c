@@ -85,7 +85,7 @@ static void twi_delay(unsigned char v){
 static bool twi_write_start(void) {
   SCL_HIGH();
   SDA_HIGH();
-  if (SDA_READ() == 0) return false;
+  if (SDA_READ() == 0) {} //return false;
   twi_delay(twi_dcount);
   SDA_LOW();
   twi_delay(twi_dcount);
@@ -151,13 +151,13 @@ unsigned char twi_writeTo(unsigned char address, unsigned char * buf, unsigned i
   unsigned int i;
   if(!twi_write_start()) return 4;//line busy
   if(!twi_write_byte(((address << 1) | 0) & 0xFF)) {
-    if (sendStop) twi_write_stop();
-    return 2; //received NACK on transmit of address
+    //if (sendStop) twi_write_stop();
+    //return 2; //received NACK on transmit of address
   }
   for(i=0; i<len; i++) {
     if(!twi_write_byte(buf[i])) {
-      if (sendStop) twi_write_stop();
-      return 3;//received NACK on transmit of data
+      //if (sendStop) twi_write_stop();
+      //return 3;//received NACK on transmit of data
     }
   }
   if(sendStop) twi_write_stop();
