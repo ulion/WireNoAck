@@ -57,7 +57,7 @@ TwoWireNoAck::TwoWireNoAck(){}
 void TwoWireNoAck::begin(int sda, int scl){
   default_sda_pin = sda;
   default_scl_pin = scl;
-  twi_init(sda, scl);
+  twi_no_ack_init(sda, scl);
   flush();
 }
 
@@ -82,14 +82,14 @@ void TwoWireNoAck::begin(int address){
 }
 
 void TwoWireNoAck::setClock(uint32_t frequency){
-  twi_setClock(frequency);
+  twi_no_ack_setClock(frequency);
 }
 
 size_t TwoWireNoAck::requestFrom(uint8_t address, size_t size, bool sendStop){
   if(size > BUFFER_LENGTH){
     size = BUFFER_LENGTH;
   }
-  size_t read = (twi_readFrom(address, rxBuffer, size, sendStop) == 0)?size:0;
+  size_t read = (twi_no_ack_readFrom(address, rxBuffer, size, sendStop) == 0)?size:0;
   rxBufferIndex = 0;
   rxBufferLength = read;
   return read;
@@ -123,7 +123,7 @@ void TwoWireNoAck::beginTransmission(int address){
 }
 
 uint8_t TwoWireNoAck::endTransmission(uint8_t sendStop){
-  int8_t ret = twi_writeTo(txAddress, txBuffer, txBufferLength, sendStop);
+  int8_t ret = twi_no_ack_writeTo(txAddress, txBuffer, txBufferLength, sendStop);
   txBufferIndex = 0;
   txBufferLength = 0;
   transmitting = 0;

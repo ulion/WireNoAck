@@ -22,7 +22,7 @@
 #include "pins_arduino.h"
 //#include "wiring_private.h"
 
-unsigned char twi_dcount = 18;
+static unsigned char twi_dcount = 18;
 static unsigned char twi_sda, twi_scl;
 
 #define SDA_LOW()   (GPES = (1 << twi_sda)) //Enable SDA (becomes output and since GPO is 0 for the pin, it will pull the line low)
@@ -42,7 +42,7 @@ static unsigned char twi_sda, twi_scl;
 #define TWI_CLOCK_STRETCH 1600
 #endif
 
-void twi_setClock(unsigned int freq){
+void twi_no_ack_setClock(unsigned int freq){
 #if F_CPU == FCPU80
   if(freq <= 100000) twi_dcount = 19;//about 100KHz
   else if(freq <= 200000) twi_dcount = 8;//about 200KHz
@@ -60,15 +60,15 @@ void twi_setClock(unsigned int freq){
 #endif
 }
 
-void twi_init(unsigned char sda, unsigned char scl){
+void twi_no_ack_init(unsigned char sda, unsigned char scl){
   twi_sda = sda;
   twi_scl = scl;
   pinMode(twi_sda, INPUT_PULLUP);
   pinMode(twi_scl, INPUT_PULLUP);
-  twi_setClock(100000);
+  twi_no_ack_setClock(100000);
 }
 
-void twi_stop(void){
+void twi_no_ack_stop(void){
   pinMode(twi_sda, INPUT);
   pinMode(twi_scl, INPUT);
 }
@@ -147,7 +147,7 @@ static unsigned char twi_read_byte(bool nack) {
   return byte;
 }
 
-unsigned char twi_writeTo(unsigned char address, unsigned char * buf, unsigned int len, unsigned char sendStop){
+unsigned char twi_no_ack_writeTo(unsigned char address, unsigned char * buf, unsigned int len, unsigned char sendStop){
   unsigned int i;
   if(!twi_write_start()) return 4;//line busy
   if(!twi_write_byte(((address << 1) | 0) & 0xFF)) {
@@ -171,7 +171,7 @@ unsigned char twi_writeTo(unsigned char address, unsigned char * buf, unsigned i
   return 0;
 }
 
-unsigned char twi_readFrom(unsigned char address, unsigned char* buf, unsigned int len, unsigned char sendStop){
+unsigned char twi_no_ack_readFrom(unsigned char address, unsigned char* buf, unsigned int len, unsigned char sendStop){
   unsigned int i;
   if(!twi_write_start()) return 4;//line busy
   if(!twi_write_byte(((address << 1) | 1) & 0xFF)) {

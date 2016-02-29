@@ -26,11 +26,11 @@
 extern "C" {
 #endif
 
-void twi_init(unsigned char sda, unsigned char scl);
-void twi_stop(void);
-void twi_setClock(unsigned int freq);
-uint8_t twi_writeTo(unsigned char address, unsigned char * buf, unsigned int len, unsigned char sendStop);
-uint8_t twi_readFrom(unsigned char address, unsigned char * buf, unsigned int len, unsigned char sendStop);
+void twi_no_ack_init(unsigned char sda, unsigned char scl);
+void twi_no_ack_stop(void);
+void twi_no_ack_setClock(unsigned int freq);
+uint8_t twi_no_ack_writeTo(unsigned char address, unsigned char * buf, unsigned int len, unsigned char sendStop);
+uint8_t twi_no_ack_readFrom(unsigned char address, unsigned char * buf, unsigned int len, unsigned char sendStop);
 
 #ifdef __cplusplus
 }
